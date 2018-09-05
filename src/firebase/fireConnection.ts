@@ -1,12 +1,15 @@
 import * as firebase from 'firebase';
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 let config = {
-  apiKey: "AIzaSyDrDeyntZcwmM7Iz-hqJJzqqhTcgi3fKUE",
-  authDomain: "human-backend-d91c1.firebaseapp.com",
-  databaseURL: "https://human-backend-d91c1.firebaseio.com",
-  projectId: "human-backend-d91c1",
-  storageBucket: "human-backend-d91c1.appspot.com",
-  messagingSenderId: "78736459473"
+  apiKey: process.env.APIKEY,
+  authDomain: process.env.AUTHDOMAIN,
+  databaseURL: process.env.DATABASEURL,
+  projectId: process.env.PROJECTID,
+  storageBucket: process.env.STORAGEBUCKET,
+  messagingSenderId: process.env.MESSAGINGSENDERID
 };
 
 firebase.initializeApp(config);

@@ -19,8 +19,8 @@ router.get("/getall", (req: Request, res: Response, next: NextFunction) => {
             .then((lol) => {
                 resolve();
                 res.send(lol);
-            }).catch(() => {
-                reject();
+            }).catch((err) => {
+                reject(err);
             });
     });
 });

@@ -18,6 +18,20 @@ router.get("/getall", (req: Request, res: Response, next: NextFunction) => {
         controller.getAllRequest(req, res, next)
             .then((lol) => {
                 resolve();
+                // res.header({"Content-Type":"application/json"});
+                res.send(lol);
+            }).catch((err) => {
+                reject(err);
+            });
+    });
+});
+
+router.get("/get/:id", (req: Request, res: Response, next: NextFunction) => {
+    const controller = new requestController.RequestData;
+    new Promise((resolve, reject) => {
+        controller.getRequest(req, res, next)
+            .then((lol) => {
+                resolve();
                 res.send(lol);
             }).catch((err) => {
                 reject(err);

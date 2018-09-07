@@ -2,10 +2,14 @@ import { userController } from "../controllers/userController";
 import { requestController } from "../controllers/requestController";
 import * as requestAPI from "./requestAPI";
 import * as userAPI from "./userAPI";
+import cors from "cors";
+
 
 import { Router, Request, Response, NextFunction } from "express";
 
 const router: Router = Router();
+// Use CORS
+router.use(cors());
 
 // router.post("/user", (req: Request, res: Response, next: NextFunction) => {
 //     const controller = new userController.UserData;

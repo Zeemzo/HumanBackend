@@ -4,7 +4,7 @@
   "license": "freeware",
   "author": "Azeem Ashraf",
   "scripts": {
-    "start": "ts-node ./src/index.ts",
+    "start": "npm run build && node ./dist/index.js",
     "build": "npm run build-ts",
     "build-ts": "tsc",
     "tslint": "tslint -c tslint.json -p tsconfig.json"

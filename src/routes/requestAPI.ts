@@ -5,7 +5,11 @@ const router: Router = Router();
 
 router.post("/add", (req: Request, res: Response, next: NextFunction) => {
     const controller = new requestController.RequestData;
-    controller.writeRequestData(req, res, next);
+    controller.writeRequestData(req, res, next).then((lol)=>{
+        if(lol){
+            res.send(lol);
+        }
+    });
     // if (result) {
     //     res.send("Done");
     // }

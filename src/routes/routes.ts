@@ -16,7 +16,6 @@ const router: Router = Router();
 // Use CORS
 router.use(cors());
 
-<<<<<<< HEAD
 router.use("/request", auth,requestAPI.router);
 router.use("/matchedRequest",auth, requestAPI.router);
 
@@ -55,8 +54,7 @@ function auth(req:Request, res:Response, next:NextFunction) {
 
 
 
-export { router };
-=======
+
 // router.post("/user", (req: Request, res: Response, next: NextFunction) => {
 //     const controller = new userController.UserData;
 //     controller.writeUserData(req, res, next);
@@ -102,8 +100,7 @@ export { router };
 // });
 // Export the express.Router() instance to be used by index.ts
 
-router.use("/request",requestAPI.router);
-router.use("/user",userAPI.router);
+// router.use("/request",requestAPI.router);
+// router.use("/user",userAPI.router);
 
 export {router};
->>>>>>> c9e5cecf1360b793968ed4c77a4acdf712543671

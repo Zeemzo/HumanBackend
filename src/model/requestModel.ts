@@ -26,4 +26,7 @@ export class requestModel {
 
   }
 
+public request=()=>{ return new requestModel("",null,null,"","","","");}
+
+
 }

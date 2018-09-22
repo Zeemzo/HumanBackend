@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from "express";
 export namespace userController {
     export class UserData {
         public writeUserData(req: Request, res: Response, next: NextFunction) {
+            // var userId = firebase.auth().currentUser.uid;
 
             return firebase.database()
                 .ref('users/' + req.body.userId)

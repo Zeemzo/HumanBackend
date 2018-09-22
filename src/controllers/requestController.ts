@@ -1,39 +1,40 @@
 import firebase from '../firebase/fireConnection';
-import { NextFunction, Request, Response } from "express";
-
+import { NextFunction, Request, Response, json } from "express";
+import * as requestModel from '../model/requestModel'
 
 
 export namespace requestController {
     export class RequestData {
         public writeRequestData(req: Request, res: Response, next: NextFunction): Promise<any> {
-            // let Id = (new Date().getTime() / 1000 | 0).toString(16) + Math.ceil(Math.random() * 100000000000);
+            let Id = (new Date().getTime() / 1000 | 0).toString(16) + Math.ceil(Math.random() * 100000000000);
             // var priority = firebase.firestore.QuerySnapshot;
-            let old = [];
+            // let old: any = [];
             const request = {
                 email: req.body.email,
                 latitude: req.body.latitude,
                 longitude: req.body.longitude,
-                type: req.body.type,
+                type: req.body.requestType,
                 description: req.body.description,
                 status: false
             };
-            return firebase.database().ref('/request/needs/')
-                .once('value')
-                .then(function (snapshot) {
-                    const lol = snapshot.val();
-                    console.log(lol);
-                    old = lol;
 
-                    old.push(request);
-                    return firebase.database().ref('/request/needs/').update(old).then((snapshot)=>{
-                        return "done";
-                    });
-                }).catch(() => {
-                    // console.log("error");
-                });
+            
 
+            const dateId = (new Date().toDateString()).toString();
+            const addddd = '/request/' + dateId + '/' + req.body.requestType + '/'+Id+'/';
+            console.log(addddd);
+          
 
-
+                    return firebase.database().ref(addddd)
+                        .set(request)
+                        .then(
+                            (snapshot) => {
+                                return res.json({ message: "done" });
+                            }
+                        ).catch((err) => {
+                            return res.json({ err: err })
+                        });
+            
         }
 
         // public updateRequestData(req: Request, res: Response, next: NextFunction): Promise<boolean> {
@@ -44,7 +45,7 @@ export namespace requestController {
         public getAllRequest(req: Request, res: Response, next: NextFunction): Promise<any> {
             // var userId = firebase.auth().currentUser.uid;
 
-            return firebase.database().ref('/request')
+            return firebase.database().ref('/request/'+req.params.UTCdate+'/'+req.params.requestType+'/')
                 .once('value')
                 .then(function (snapshot) {
                     const lol = snapshot.val();

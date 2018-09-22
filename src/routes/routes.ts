@@ -9,7 +9,10 @@ import { Router, Request, Response, NextFunction } from "express";
 
 const router: Router = Router();
 // Use CORS
-router.use(cors());
+router.use(cors({
+  origin: 'http://localhost:5000',
+  credentials: true
+}));
 
 // router.post("/user", (req: Request, res: Response, next: NextFunction) => {
 //     const controller = new userController.UserData;

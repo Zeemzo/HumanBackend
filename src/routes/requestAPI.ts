@@ -28,7 +28,7 @@ router.get("/getall/:UTCdate/:requestType", (req: Request, res: Response, next: 
     new Promise((resolve, reject) => {
         controller.getAllRequest(req, res, next)
             .then((lol) => {
-                resolve();
+                resolve(lol);
                 // res.header({"Content-Type":"application/json"});
                 res.send(lol);
             }).catch((err) => {

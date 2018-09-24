@@ -9,18 +9,11 @@ export namespace requestController {
             let Id = (new Date().getTime() / 1000 | 0).toString(16) + Math.ceil(Math.random() * 100000000000);
             // var priority = firebase.firestore.QuerySnapshot;
             // let old: any = [];
-            const request = {
-                email: req.body.email,
-                latitude: req.body.latitude,
-                longitude: req.body.longitude,
-                type: req.body.requestType,
-                description: req.body.description,
-                status: false
-            };
+            const request = req.body;
 
             
 
-            const dateId = (new Date().toDateString()).toString();
+            const dateId =  ""+new Date().toDateString();
             const addddd = '/request/' + dateId + '/' + req.body.requestType + '/'+Id+'/';
             console.log(addddd);
           
@@ -70,7 +63,7 @@ export namespace requestController {
 
                     // return list;
                 }).catch(() => {
-                    // console.log("error");
+                    console.log("error");
                 });
         }
     }

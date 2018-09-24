@@ -1,6 +1,6 @@
 import { userController } from "../controllers/userController";
 import { requestController } from "../controllers/requestController";
-import * as firebase from '../firebase/fireConnection'
+import {admin} from '../firebase/admin'
 import * as requestAPI from "./requestAPI";
 import * as userAPI from "./userAPI";
 import cors from "cors";
@@ -8,6 +8,8 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 var jwt = require('jsonwebtoken');
+
+
 
 
 import { Router, Request, Response, NextFunction } from "express";
@@ -23,8 +25,20 @@ router.use("/user", auth,userAPI.router);
 // router.use("/report");
 
 router.post("/token", (req, res, next) => {
+    admin.auth().getUserByEmail(req.body.email)
+    .then((userRecord:any)=> {
+        console.log(userRecord)
+      // See the UserRecord reference doc for the contents of userRecord.
+    //   console.log("Successfully fetched user data:", userRecord.toJSON());
     var token = jwt.sign({ email: req.body.email }, process.env.SECRET);
     res.send({token:token});
+    })
+    .catch((error:any)=> {
+    //   console.log("Error fetching user data:", error);
+    res.send({error:"Email is not authenticated!"});
+
+    });
+   
 
 });
 

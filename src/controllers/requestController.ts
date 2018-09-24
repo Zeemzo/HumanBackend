@@ -10,11 +10,13 @@ export namespace requestController {
             // var priority = firebase.firestore.QuerySnapshot;
             // let old: any = [];
             const request = req.body;
+            const now = new Date;
 
-            
+            const utc_timestamp = Date.UTC(now.getFullYear(),now.getMonth(), now.getDate());
 
-            const dateId =  ""+new Date().toDateString();
-            const addddd = '/request/' + dateId + '/' + req.body.requestType + '/'+Id+'/';
+
+            // const dateId =  ""+new Date().toDateString();
+            const addddd = '/request/' + utc_timestamp + '/' + req.body.requestType + '/'+Id+'/';
             console.log(addddd);
           
 

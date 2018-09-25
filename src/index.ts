@@ -11,12 +11,12 @@ const app: express.Application = express();
 // The port the express app will listen on
 const port =process.env.PORT||7000;
 // app.use(bodyParser);
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
 // app.use(bodyParser.json({limit: '50mb'}));
-// app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 app.use( "/api" , apiRoutes.router);
 

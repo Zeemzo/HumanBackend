@@ -1,5 +1,6 @@
 import firebase from '../firebase/fireConnection';
 import { NextFunction, Request, Response } from "express";
+import {admin} from '../firebase/admin'
 
 export namespace userController {
     export class UserData {
@@ -12,6 +13,29 @@ export namespace userController {
                     username: req.body.name,
                     email: req.body.email,
                     profile_picture: req.body.imageUrl
+                    // pushToken:req.body.pushToken
+                }, function(error) {
+                    if (error) {
+                      res.send({message:"Failed"});// The write failed...
+                    } else {
+                        res.send({message:"Success"});
+                      // Data saved successfully!
+                    }
+                  });
+        }
+        public writeUserDataPush(req: Request, res: Response, next: NextFunction) {
+            // var userId = firebase.auth().currentUser.uid;
+
+           
+        
+            // const pushToken=req.body.pushToken;
+            return firebase.database()
+                .ref('users/' + req.body.email)
+                .set({
+                    // username: req.body.name,
+                    email: req.body.email,
+                    // profile_picture: req.body.imageUrl,
+                    pushToken:req.body.pushToken
                 }, function(error) {
                     if (error) {
                       res.send({message:"Failed"});// The write failed...
@@ -31,7 +55,7 @@ export namespace userController {
                     const lol = snapshot.val();
                     return lol;
                 }).catch(() => {
-                    // console.log("error");
+                    console.log("error");
                 });
         }
     }

@@ -42,6 +42,23 @@ router.post("/token", (req, res, next) => {
 
 });
 
+router.post("push/token", (req, res, next) => {
+   const email=req.body.email;
+   const pushToken=req.body.pushToken;
+   const controller = new userController.UserData;
+   controller.writeUserDataPush(req, res, next);
+   // if (result) {
+   //     res.send("Done");
+   // }
+   console.log(req.body);
+
+
+
+   
+
+});
+
+
 function auth(req:Request, res:Response, next:NextFunction) {
     const lol=req.headers.authorization;
     const token:string[]=lol.split(" ");
@@ -54,7 +71,7 @@ function auth(req:Request, res:Response, next:NextFunction) {
             return res.status(403).json({ err: "Authentication failed" });
         } else {
             
-             console.log(decodedToken);
+            //  console.log(decodedToken);
 
             next();
         }

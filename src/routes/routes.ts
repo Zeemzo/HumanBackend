@@ -27,7 +27,7 @@ router.use("/user", auth,userAPI.router);
 router.post("/token", (req, res, next) => {
     admin.auth().getUserByEmail(req.body.email)
     .then((userRecord:any)=> {
-        console.log(userRecord)
+        // console.log(userRecord)
       // See the UserRecord reference doc for the contents of userRecord.
     //   console.log("Successfully fetched user data:", userRecord.toJSON());
     var token = jwt.sign({ email: req.body.email }, process.env.SECRET);
@@ -42,15 +42,16 @@ router.post("/token", (req, res, next) => {
 
 });
 
-router.post("push/token", (req, res, next) => {
-   const email=req.body.email;
-   const pushToken=req.body.pushToken;
+router.post("/push/token", (req, res, next) => {
+//    const email=req.body.email;
+//    const pushToken=req.body.pushToken;
    const controller = new userController.UserData;
+   console.log(req.body);
+
    controller.writeUserDataPush(req, res, next);
    // if (result) {
    //     res.send("Done");
    // }
-   console.log(req.body);
 
 
 

@@ -24,15 +24,16 @@ router.post("/add", (req: Request, res: Response, next: NextFunction) => {
 router.post("/accept", (req: Request, res: Response, next: NextFunction) => {
     const controller = new requestController.RequestData;
     new Promise((resolve, reject) => {
-        controller.acceptRequest(req, res, next).then((lol) => {
-            if (lol) {
+        controller.acceptRequest(req, res, next)
+        .then((lol) => {
+            // if (lol) {
                 resolve(lol);
                 res.send(lol);
-            }
+            // }
         }).catch((err) => {
             reject(err);
         });;
-        console.log(req.body);
+        // console.log(req.body);
     })
     // if (result) {
     //     res.send("Done");

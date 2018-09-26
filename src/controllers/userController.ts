@@ -26,14 +26,12 @@ export namespace userController {
         public writeUserDataPush(req: Request, res: Response, next: NextFunction) {
             // var userId = firebase.auth().currentUser.uid;
 
-           
-        
             // const pushToken=req.body.pushToken;
             return firebase.database()
-                .ref('users/' + req.body.email)
+                .ref('users/'+req.body.userId)
                 .set({
                     // username: req.body.name,
-                    email: req.body.email,
+                    // email: req.body.email,
                     // profile_picture: req.body.imageUrl,
                     pushToken:req.body.pushToken
                 }, function(error) {

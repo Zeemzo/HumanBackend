@@ -19,7 +19,7 @@ export namespace requestController {
 
             // const dateId =  ""+new Date().toDateString();
             const addddd = '/request/' + utc_timestamp + '/' + req.body.requestType + '/' + Id + '/';
-            console.log(addddd);
+            // console.log(addddd);
 
 
             return firebase.database().ref(addddd)
@@ -46,7 +46,7 @@ export namespace requestController {
                 .once('value')
                 .then(function (snapshot) {
                     const lol = snapshot.val();
-                    console.log(lol);
+                    // console.log(lol);
                     return lol;
                 }).catch(() => {
                     // console.log("error");
@@ -60,7 +60,7 @@ export namespace requestController {
                 .once('value')
                 .then(function (snapshot) {
                     const lol = snapshot.val();
-                    console.log(lol);
+                    // console.log(lol);
 
                     return lol;
 
@@ -105,42 +105,43 @@ export namespace requestController {
             const now = new Date;
 
             const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-            let list = "";
-            return firebase.database().ref('/request/' + utc_timestamp + '/' + req.body.requestType + '/' + req.body.id)
+            // let list = "";
+
+            const lol=firebase.auth();
+            // lol.
+            console.log(req.body);
+            return firebase.database().ref('/users/'+req.body.userId)
                 .once('value')
-                .then(function (snapshot) {
-                    const lol = snapshot.val();
-                    console.log(lol);
+                .then((snapshot) => {
+                    console.log(snapshot.val());
+                    const pushToken = snapshot.val().pushToken;
+                    const request = {
+                        notification: {
+                            title: "Your Request has been accepted",
+                            body: "Background message body",
+                            click_action: "http://localhost:3000/feed"
+                        },
 
-                    return firebase.database().ref('/user/')
-                        .orderByChild('email').equalTo(lol.email).once('value')
-                        .then((snapshot) => {
-                            const pushToken = snapshot.val().pushToken;
-                            const request={ notification: {
-                                title: "Hello this is mirag",
-                                body: "Background message body",
-                                click_action : "http://localhost:3000/feed"
-                              },
-                            
-                              to :pushToken
-                            
-                            };
-                            axios.post('https://fcm.googleapis.com/fcm/send',request).then((res)=>{
-                                console.log(res);
-                            }
-                                
-                            ).catch((err)=>{ 
-                                console.log(err);});
-                            // res.send();
-                           
-                            // console.log(snapshot.val());
-                        });;
+                        to: pushToken
+
+                    };
+                    axios.post('https://fcm.googleapis.com/fcm/send', request,{
+                        headers: { 'Authorization': "key=AIzaSyCflWmYSu16ICHrJrZTXoQkVpl9Yc3174k" }
+                    }).then((r) => {
+                        // console.log(res);
+                        res.send(r);
+                    }
+
+                    ).catch((err) => {
+                        console.log(err.message);
+                    });
+                    // res.send();
+
+                    // console.log(snapshot.val());
+                });;
 
 
-                    // return list;
-                }).catch(() => {
-                    console.log("error");
-                });
+
         }
     }
 }

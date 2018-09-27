@@ -30,9 +30,6 @@ export namespace userController {
             return firebase.database()
                 .ref('users/'+req.body.userId)
                 .set({
-                    // username: req.body.name,
-                    // email: req.body.email,
-                    // profile_picture: req.body.imageUrl,
                     pushToken:req.body.pushToken
                 }, function(error) {
                     if (error) {

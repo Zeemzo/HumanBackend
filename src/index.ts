@@ -6,10 +6,20 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 
+
+
 // Create a new express application instance
 const app: express.Application = express();
 // The port the express app will listen on
 const port =process.env.PORT||7000;
+
+app.use(cors({
+    "origin": "*",
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "preflightContinue": false,
+    "optionsSuccessStatus": 204
+  }));
+
 // app.use(bodyParser);
 // app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

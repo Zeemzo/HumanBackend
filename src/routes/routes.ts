@@ -16,7 +16,12 @@ import { Router, Request, Response, NextFunction } from "express";
 
 const router: Router = Router();
 // Use CORS
-router.use(cors());
+router.use(cors({
+    "origin": "*",
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "preflightContinue": false,
+    "optionsSuccessStatus": 204
+  }));
 
 router.use("/request", auth,requestAPI.router);
 router.use("/matchedRequest",auth, requestAPI.router);

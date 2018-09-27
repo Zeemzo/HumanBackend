@@ -2,6 +2,8 @@ import * as bodyParser from "body-parser";
 import express = require("express");
 import * as apiRoutes from "./routes/routes";
 import * as dotenv from "dotenv";
+import cors from "cors";
+
 
 dotenv.config();
 

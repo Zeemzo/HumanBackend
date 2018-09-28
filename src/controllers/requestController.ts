@@ -118,8 +118,8 @@ export namespace requestController {
                     const request = {
                         notification: {
                             title: "Your Request has been accepted",
-                            body: "Background message body",
-                            click_action: "http://localhost:3000/feed"
+                            body: ""+req.body.roomId,
+                            click_action: "https://humanbackend.herokuapp.com/chatty"
                         },
 
                         to: pushToken

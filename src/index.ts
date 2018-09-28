@@ -21,7 +21,8 @@ app.use(function(req, res, next) {
     next();
   });
   app.use(cors({
-    "origin": "https://human-24b1b.firebaseapp.com",
+    // "origin": "https://human-24b1b.firebaseapp.com",
+    "origin": "http://localhost:3000",
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
     "preflightContinue": false,
     "optionsSuccessStatus": 204
@@ -29,7 +30,7 @@ app.use(function(req, res, next) {
 
 // app.use(bodyParser);
 // app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 
 
 // app.use(bodyParser.json({limit: '50mb'}));

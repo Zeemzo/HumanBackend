@@ -119,7 +119,7 @@ export namespace requestController {
                         notification: {
                             title: "Your Request has been accepted",
                             body: ""+req.body.roomId,
-                            click_action: "https://humanbackend.herokuapp.com/chatty"
+                            click_action: "https://human-24b1b.firebaseapp.com/chatty"
                         },
 
                         to: pushToken

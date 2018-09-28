@@ -42,7 +42,8 @@ export namespace requestController {
         public getAllRequest(req: Request, res: Response, next: NextFunction): Promise<any> {
             // var userId = firebase.auth().currentUser.uid;
 
-            return firebase.database().ref('/request/' + req.params.UTCdate + '/' + req.params.requestType + '/')
+            return firebase.database().ref('/request/' + req.params.UTCdate + '/' + req.params.requestType + '/') 
+            .orderByChild('status').equalTo(false)
                 .once('value')
                 .then(function (snapshot) {
                     const lol = snapshot.val();
@@ -107,10 +108,10 @@ export namespace requestController {
             const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
             // let list = "";
 
-            const lol=firebase.auth();
+            const lol = firebase.auth();
             // lol.
             console.log(req.body);
-            return firebase.database().ref('/users/'+req.body.userId)
+            return firebase.database().ref('/users/' + req.body.userId)
                 .once('value')
                 .then((snapshot) => {
                     console.log(snapshot.val());
@@ -118,18 +119,31 @@ export namespace requestController {
                     const request = {
                         notification: {
                             title: "Your Request has been accepted",
-                            body: ""+req.body.roomId,
+                            body: "" + req.body.roomId,
                             click_action: "https://human-24b1b.firebaseapp.com/chatty"
                         },
 
                         to: pushToken
 
                     };
-                    axios.post('https://fcm.googleapis.com/fcm/send', request,{
+
+
+                    axios.post('https://fcm.googleapis.com/fcm/send', request, {
                         headers: { 'Authorization': "key=AIzaSyCflWmYSu16ICHrJrZTXoQkVpl9Yc3174k" }
                     }).then((r) => {
                         // console.log(res);
-                        res.send(r);
+                        // res.send(r);
+                        return firebase.database().ref('/request/' + utc_timestamp + '/' + req.body.requestType + '/' + req.body.id)
+                            .once('value').then((snapshot) => {
+                                const br = snapshot.val()
+                                console.log(br);
+                                br.status = true;
+                                return firebase.database().ref('/request/' + utc_timestamp + '/' + req.body.requestType + '/' + req.body.id)
+                                    .set(br).then((snapshot)=>{
+                                        res.send(r);
+                                    })
+
+                            })
                     }
 
                     ).catch((err) => {
@@ -138,7 +152,9 @@ export namespace requestController {
                     // res.send();
 
                     // console.log(snapshot.val());
-                });;
+                });
+
+
 
 
 

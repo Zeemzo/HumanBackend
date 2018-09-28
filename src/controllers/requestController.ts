@@ -118,10 +118,11 @@ export namespace requestController {
                     const pushToken = snapshot.val().pushToken;
                     const request = {
                         notification: {
-                            title: "Your Request has been accepted",
+                            title: "You have a message from a fellow Human",
                             body: "" + req.body.roomId,
                             click_action: "https://human-24b1b.firebaseapp.com/chatty"
                         },
+                        priority : "high",
 
                         to: pushToken
 

@@ -3,8 +3,12 @@ import express = require("express");
 import * as apiRoutes from "./routes/routes";
 import * as dotenv from "dotenv";
 import cors from "cors";
-import { CollectionReference } from "@google-cloud/firestore";
+import * as cron from 'node-cron';
+import { requestHandler } from "./controllers/requestMatcher";
 
+// import { CollectionReference } from "@google-cloud/firestore";
+
+// const cron = require("node-cron");
 
 dotenv.config();
 
@@ -21,8 +25,8 @@ app.use(function(req, res, next) {
     next();
   });
   app.use(cors({
-    "origin": "https://human-24b1b.firebaseapp.com",
-    // "origin": "http://localhost:3000",
+    // "origin": "https://human-24b1b.firebaseapp.com",
+    "origin": "http://localhost:3000",
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
     "preflightContinue": false,
     "optionsSuccessStatus": 204
@@ -44,6 +48,18 @@ app.listen(port, () => {
     // tslint:disable-next-line:no-console
     console.log(`Listening at http://localhost:${port}/`);
 });
+
+cron.schedule("* */1 * * *", function() {
+  const controller = new requestHandler.matchData;
+    new Promise((resolve, reject) => {
+        controller.matchRequest().then(res=>{
+          console.log("THE CRON HAS MATCHED REQUESTS!!!");
+        });
+        
+    })
+});
+
+
 
 
 export default app;

@@ -12,6 +12,7 @@ export namespace requestController {
             // var priority = firebase.firestore.QuerySnapshot;
             // let old: any = [];
             const request = req.body;
+            request.id=Id;
             const now = new Date;
 
             const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
@@ -26,7 +27,10 @@ export namespace requestController {
                 .set(request)
                 .then(
                     (snapshot) => {
-                        return res.json({ message: "done" });
+                        firebase.database().ref('users/'+req.body.userId+'/request/'+Id+'/').set(request,()=>{
+                            return res.json({ message: "done" });
+
+                        })
                     }
                 ).catch((err) => {
                     return res.json({ err: err })
@@ -77,8 +81,15 @@ export namespace requestController {
                 .child(req.params.requestType).orderByChild(req.params.attribute).equalTo(req.params.search)
                 .once('value')
                 .then((snapshot) => {
-                    res.send(snapshot.val());
-                    // console.log(snapshot.val());
+                    const lol=snapshot.val();
+                    var arr = [];
+                    for (var key in lol) {
+                      lol[key].id = key;
+                      arr.push(lol[key]);
+                    }
+                    res.send(arr[0])
+                    
+                    console.log(snapshot.val());
                 });
 
 
@@ -120,7 +131,7 @@ export namespace requestController {
                         notification: {
                             title: "You have a message from a fellow Human",
                             body: "" + req.body.roomId,
-                            click_action: "https://human-24b1b.firebaseapp.com/chatty"
+                            click_action: "https://human-24b1b.firebaseapp.com/chat"
                         },
                         priority : "high",
 
@@ -139,6 +150,7 @@ export namespace requestController {
                                 const br = snapshot.val()
                                 console.log(br);
                                 br.status = true;
+                                br.matched=true;
                                 return firebase.database().ref('/request/' + utc_timestamp + '/' + req.body.requestType + '/' + req.body.id)
                                     .set(br).then((snapshot)=>{
                                         res.send(r);

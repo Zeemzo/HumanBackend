@@ -34,5 +34,14 @@ router.post("/add", (req: Request, res: Response, next: NextFunction) => {
     console.log(req.body);
 });
 
+router.post("/update", (req: Request, res: Response, next: NextFunction) => {
+    const controller = new userController.UserData;
+    controller.updateUserData(req, res, next);
+    // if (result) {
+    //     res.send("Done");
+    // }
+    console.log(req.body);
+});
+
 // Export the express.Router() instance to be used by routes.ts
 export {router};

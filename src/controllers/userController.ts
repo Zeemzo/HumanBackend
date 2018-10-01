@@ -9,12 +9,7 @@ export namespace userController {
 
             return firebase.database()
                 .ref('users/' + req.body.userId)
-                .set({
-                    username: req.body.name,
-                    email: req.body.email,
-                    profile_picture: req.body.imageUrl
-                    // pushToken:req.body.pushToken
-                }, function(error) {
+                .set(req.body, function(error) {
                     if (error) {
                       res.send({message:"Failed"});// The write failed...
                     } else {
@@ -27,11 +22,31 @@ export namespace userController {
             // var userId = firebase.auth().currentUser.uid;
 
             // const pushToken=req.body.pushToken;
-            return firebase.database()
-                .ref('users/'+req.body.userId)
-                .set({
+            const lol= firebase.database()
+                .ref('users/'+req.body.userId);
+
+               return lol.update({
                     pushToken:req.body.pushToken
                 }, function(error) {
+                    if (error) {
+                      res.send({message:"Failed"});// The write failed...
+                    } else {
+                        res.send({message:"Success"});
+                      // Data saved successfully!
+                    }
+                  });
+        }
+
+        public updateUserData(req: Request, res: Response, next: NextFunction) {
+            // var userId = firebase.auth().currentUser.uid;
+
+            // const pushToken=req.body.pushToken;
+            const lol= firebase.database()
+                .ref('users/'+req.body.userId);
+
+               return lol.update(
+                   req.body
+                , function(error) {
                     if (error) {
                       res.send({message:"Failed"});// The write failed...
                     } else {

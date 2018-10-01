@@ -68,5 +68,21 @@ export namespace userController {
                     console.log("error");
                 });
         }
+
+        public getUserContributions(req: Request, res: Response, next: NextFunction): Promise<any> {
+            // var userId = firebase.auth().currentUser.uid;
+
+            console.log(req.params.completed)
+            const completed=req.params.completed=="fulfilled"?true:false;
+            return firebase.database().ref('/users/' + req.params.userId+'/request/')
+            .orderByChild('fulfilled').equalTo(completed)
+                .once('value')
+                .then(function (snapshot) {
+                    const lol = snapshot.val();
+                    return lol;
+                }).catch(() => {
+                    console.log("error");
+                });
+        }
     }
 }

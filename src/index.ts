@@ -49,15 +49,16 @@ app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}/`);
 });
 
-// cron.schedule("* */1 * * *", function() {
-//   const controller = new requestHandler.matchData;
-//     new Promise((resolve, reject) => {
-//         controller.matchRequest().then(res=>{
-//           console.log("THE CRON HAS MATCHED REQUESTS!!!");
-//         });
+cron.schedule("* */1 * * *", function() {
+  const controller = new requestHandler.matchData;
+    new Promise((resolve, reject) => {
+        controller.matchRequestV2();
         
-//     })
-// });
+          console.log("THE CRON HAS MATCHED REQUESTS!!!");
+      
+        
+    })
+});
 
 
 

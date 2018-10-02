@@ -21,7 +21,7 @@ export namespace requestController {
             // const dateId =  ""+new Date().toDateString();
             const addddd = '/request/' + utc_timestamp + '/' + req.body.requestType + '/' + Id + '/';
             // console.log(addddd);
-
+            request.datestamp=utc_timestamp
 
             return firebase.database().ref(addddd)
                 .set(request)

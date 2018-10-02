@@ -30,7 +30,7 @@ export namespace requestHandler {
                     match.needy = arr[0].userId;
                     match.needyEmail = arr[0].email
                     match.needyLoc = { lat: arr[0].latitude, lng: arr[0].longitude }
-                    match.needId=arr[0].id
+                    match.needId = arr[0].id
                     ///add request id in the body of the request..!!!!!
 
                     return firebase.database().ref('/request/' + utc_timestamp)
@@ -47,7 +47,7 @@ export namespace requestHandler {
                             match.giver = arr1[0].userId;
                             match.giverEmail = arr1[0].email;
                             match.giverLoc = { lat: arr1[0].latitude, lng: arr1[0].longitude }
-                            match.giverId=arr1[0].id
+                            match.giverId = arr1[0].id
 
                             console.log(match)
                             // res.send(match)
@@ -60,6 +60,79 @@ export namespace requestHandler {
                 });
         }
 
+        public matchRequestV2() {
+
+            const now = new Date;
+
+            const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+            let Id = (new Date().getTime() / 1000 | 0).toString(16) + Math.ceil(Math.random() * 100000000000);
+            let match: any = { matchId: Id }
+            // let obj=null;
+
+            const needR = firebase.database().ref('/request/' + utc_timestamp)
+                .child('need').orderByChild('matched').equalTo(false).limitToFirst(1)
+
+            const provisionR = firebase.database().ref('/request/' + utc_timestamp)
+                .child('provision').orderByChild('matched').equalTo(false).limitToFirst(1)
+
+            if (needR != null && provisionR != null) {
+
+                needR.once('value')
+                    .then((snapshot) => {
+                        const lol = (snapshot.val());
+                        var arr = [];
+                        for (var key in lol) {
+                            lol[key].id = key;
+                            arr.push(lol[key]);
+                        }
+                        // res.send(arr[0])
+                        // console.log(arr)
+                        match.needy = arr[0].userId;
+                        match.needyEmail = arr[0].email
+                        match.needyLoc = { lat: arr[0].latitude, lng: arr[0].longitude }
+                        match.needId = arr[0].id
+
+                        firebase.database()
+                            .ref('/request/' + utc_timestamp + '/need/' + arr[0].id).update({ matched: true })
+                        firebase.database()
+                            .ref('/user/' + arr[0].userId + '/request/' + arr[0].id).update({ matched: true })
+
+                        provisionR.once('value')
+                            .then((snapshot) => {
+                                // console.log(snapshot.val());
+                                const lol1 = (snapshot.val());
+                                var arr1 = [];
+                                for (var key in lol1) {
+                                    lol1[key].id = key;
+                                    arr1.push(lol1[key]);
+                                }
+                                match.giver = arr1[0].userId;
+                                match.giverEmail = arr1[0].email;
+                                match.giverLoc = { lat: arr1[0].latitude, lng: arr1[0].longitude }
+                                match.giverId = arr1[0].id
+
+                                firebase.database()
+                                    .ref('/request/' + utc_timestamp + '/provision/' + arr1[0].id).update({ matched: true })
+                                firebase.database()
+                                    .ref('/user/' + arr1[0].userId + '/request/' + arr1[0].id).update({ matched: true })
+
+                                console.log(match)
+                                // res.send(match)
+
+                                return firebase.database().ref('/matches/' + utc_timestamp + '/' + Id + '/').set(match).then(() => {
+                                    console.log("THE CRON HAS MATCHED REQUESTS!!!");
+                                });
+
+
+                            }
+
+                            )
+                    })
+            } else {
+                console.log("NO REQUESTS WERE MATCHED!!!");
+            }
+
+        }
 
         public getMatchRequest(req: Request, res: Response, next: NextFunction): Promise<any> {
 
@@ -77,6 +150,7 @@ export namespace requestHandler {
 
 
         }
+
 
         public getContributions(req: Request, res: Response, next: NextFunction): Promise<any> {
 

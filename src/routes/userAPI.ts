@@ -26,6 +26,8 @@ router.get("/view/:userId", (req: Request, res: Response, next: NextFunction) =>
 });
 
 
+
+
 router.get("/contributions/:userId/:completed", (req: Request, res: Response, next: NextFunction) => {
     const controller = new userController.UserData;
    new Promise((resolve, reject) => {

@@ -2,6 +2,8 @@ import { userController } from "../controllers/userController";
 import { requestController } from "../controllers/requestController";
 import { admin } from '../firebase/admin'
 import * as requestAPI from "./requestAPI";
+import * as reportsAPI from "./reportsAPI";
+
 import * as matchAPI from "./matchAPI";
 
 import * as userAPI from "./userAPI";
@@ -26,7 +28,7 @@ const router: Router = Router();
 
 router.use("/request", auth, requestAPI.router);
 router.use("/matchedRequest", auth, matchAPI.router);
-// router.use("/matchedRequest", auth, requestAPI.router);
+router.use("/reports", auth, reportsAPI.router);
 
 
 router.use("/user", auth, userAPI.router);

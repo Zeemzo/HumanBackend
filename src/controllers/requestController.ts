@@ -3,7 +3,7 @@ import { NextFunction, Request, Response, json } from "express";
 import * as requestModel from '../model/requestModel'
 // import { request } from 'https';
 import axios from 'axios';
-import { messaging } from '../../node_modules/firebase';
+import { messaging } from 'firebase';
 
 
 export namespace requestController {

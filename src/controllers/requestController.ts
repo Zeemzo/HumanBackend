@@ -134,7 +134,7 @@ export namespace requestController {
                         notification: {
                             title: "Confirm Contributer Identity",
                             body: req.body,
-                            click_action: "http://localhost:3000/confirm"
+                            click_action: "https://human-24b1b.firebaseapp.com/confirm"
                         },
                         priority : "high",
 

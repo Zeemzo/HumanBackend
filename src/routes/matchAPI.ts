@@ -21,6 +21,47 @@ router.get("/getmatches", (req: Request, res: Response, next: NextFunction) => {
     // }
     
 });
+
+
+router.get("/getactivematches", (req: Request, res: Response, next: NextFunction) => {
+    const controller = new requestHandler.matchData;
+    new Promise((resolve, reject) => {
+        controller.getActiveMatchRequest(req, res, next).then((lol) => {
+            if (lol) {
+                // resolve(lol);
+                res.send(lol);
+            }
+        }).catch((err) => {
+            // reject(err);
+        });;
+        // console.log(req.body);
+    })
+    // if (result) {
+    //     res.send("Done");
+    // }
+    
+});
+
+
+router.post("/updatematchrequest", (req: Request, res: Response, next: NextFunction) => {
+    const controller = new requestHandler.matchData;
+    new Promise((resolve, reject) => {
+        controller.updateMatchRequestStatus(req, res, next).then((lol) => {
+            if (lol) {
+                // resolve(lol);
+                res.send(lol);
+            }
+        }).catch((err) => {
+            // reject(err);
+        });;
+        // console.log(req.body);
+    })
+    // if (result) {
+    //     res.send("Done");
+    // }
+    
+});
+
 // router.post("/accept", (req: Request, res: Response, next: NextFunction) => {
 //     const controller = new requestController.RequestData;
 //     new Promise((resolve, reject) => {

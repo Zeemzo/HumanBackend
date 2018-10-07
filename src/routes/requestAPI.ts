@@ -41,6 +41,7 @@ router.post("/accept", (req: Request, res: Response, next: NextFunction) => {
     
 });
 
+
 router.get("/getall/:UTCdate/:requestType", (req: Request, res: Response, next: NextFunction) => {
     const controller = new requestController.RequestData;
     new Promise((resolve, reject) => {

@@ -1,3 +1,4 @@
+
 import firebase from '../firebase/fireConnection';
 import { NextFunction, Request, Response, json } from "express";
 import * as requestModel from '../model/requestModel'
@@ -12,7 +13,7 @@ export namespace requestHandler {
 
             const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
             let Id = (new Date().getTime() / 1000 | 0).toString(16) + Math.ceil(Math.random() * 100000000000);
-            let match: any = { matchId: Id }
+            let match: any = { matchId: Id ,active:false}
             // let obj=null;
 
             return firebase.database().ref('/request/' + utc_timestamp)
@@ -66,7 +67,7 @@ export namespace requestHandler {
 
             const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
             let Id = (new Date().getTime() / 1000 | 0).toString(16) + Math.ceil(Math.random() * 100000000000);
-            let match: any = { matchId: Id }
+            let match: any = { matchId: Id ,active:false}
             // let obj=null;
 
             const needR = firebase.database().ref('/request/' + utc_timestamp)
@@ -91,11 +92,12 @@ export namespace requestHandler {
                         match.needyEmail = arr[0].email
                         match.needyLoc = { lat: arr[0].latitude, lng: arr[0].longitude }
                         match.needId = arr[0].id
+                        match.need=arr[0];
 
                         firebase.database()
                             .ref('/request/' + utc_timestamp + '/need/' + arr[0].id).update({ matched: true })
                         firebase.database()
-                            .ref('/user/' + arr[0].userId + '/request/' + arr[0].id).update({ matched: true })
+                            .ref('/users/' + arr[0].userId + '/request/' + arr[0].id).update({ matched: true })
 
                         provisionR.once('value')
                             .then((snapshot) => {
@@ -110,11 +112,12 @@ export namespace requestHandler {
                                 match.giverEmail = arr1[0].email;
                                 match.giverLoc = { lat: arr1[0].latitude, lng: arr1[0].longitude }
                                 match.giverId = arr1[0].id
+                                match.provision=arr1[0]
 
                                 firebase.database()
                                     .ref('/request/' + utc_timestamp + '/provision/' + arr1[0].id).update({ matched: true })
                                 firebase.database()
-                                    .ref('/user/' + arr1[0].userId + '/request/' + arr1[0].id).update({ matched: true })
+                                    .ref('/users/' + arr1[0].userId + '/request/' + arr1[0].id).update({ matched: true })
 
                                 console.log(match)
                                 // res.send(match)
@@ -143,7 +146,41 @@ export namespace requestHandler {
             // let match: any = { matchId: Id }
 
 
-            return firebase.database().ref('/matches/' + utc_timestamp).once('value').then((snapshot) => {
+            return firebase.database().ref('/matches/' + utc_timestamp).orderByChild('active').equalTo(false).once('value').then((snapshot) => {
+                res.send(snapshot.val());
+            })
+            // let obj=null;
+
+
+        }
+
+        public getActiveMatchRequest(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+            const now = new Date;
+
+            const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+            // let Id = (new Date().getTime() / 1000 | 0).toString(16) + Math.ceil(Math.random() * 100000000000);
+            // let match: any = { matchId: Id }
+
+
+            return firebase.database().ref('/matches/' + utc_timestamp).orderByChild('active').equalTo(true).once('value').then((snapshot) => {
+                res.send(snapshot.val());
+            })
+            // let obj=null;
+
+
+        }
+
+        public updateMatchRequestStatus(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+            const now = new Date;
+
+            const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+            // let Id = (new Date().getTime() / 1000 | 0).toString(16) + Math.ceil(Math.random() * 100000000000);
+            // let match: any = { matchId: Id }
+
+
+            return firebase.database().ref('/matches/' + utc_timestamp+'/'+req.body.matchIyd).update(req.body).then((snapshot) => {
                 res.send(snapshot.val());
             })
             // let obj=null;

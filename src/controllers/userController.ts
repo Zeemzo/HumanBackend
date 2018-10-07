@@ -1,6 +1,7 @@
 import firebase from '../firebase/fireConnection';
 import { NextFunction, Request, Response } from "express";
-import {admin} from '../firebase/admin'
+import { admin } from '../firebase/admin'
+import axios from 'axios';
 
 export namespace userController {
     export class UserData {
@@ -9,51 +10,51 @@ export namespace userController {
 
             return firebase.database()
                 .ref('users/' + req.body.userId)
-                .set(req.body, function(error) {
+                .set(req.body, function (error) {
                     if (error) {
-                      res.send({message:"Failed"});// The write failed...
+                        res.send({ message: "Failed" });// The write failed...
                     } else {
-                        res.send({message:"Success"});
-                      // Data saved successfully!
+                        res.send({ message: "Success" });
+                        // Data saved successfully!
                     }
-                  });
+                });
         }
         public writeUserDataPush(req: Request, res: Response, next: NextFunction) {
             // var userId = firebase.auth().currentUser.uid;
 
             // const pushToken=req.body.pushToken;
-            const lol= firebase.database()
-                .ref('users/'+req.body.userId);
+            const lol = firebase.database()
+                .ref('users/' + req.body.userId);
 
-               return lol.update({
-                    pushToken:req.body.pushToken
-                }, function(error) {
-                    if (error) {
-                      res.send({message:"Failed"});// The write failed...
-                    } else {
-                        res.send({message:"Success"});
-                      // Data saved successfully!
-                    }
-                  });
+            return lol.update({
+                pushToken: req.body.pushToken
+            }, function (error) {
+                if (error) {
+                    res.send({ message: "Failed" });// The write failed...
+                } else {
+                    res.send({ message: "Success" });
+                    // Data saved successfully!
+                }
+            });
         }
 
         public updateUserData(req: Request, res: Response, next: NextFunction) {
             // var userId = firebase.auth().currentUser.uid;
 
             // const pushToken=req.body.pushToken;
-            const lol= firebase.database()
-                .ref('users/'+req.body.userId);
+            const lol = firebase.database()
+                .ref('users/' + req.body.userId);
 
-               return lol.update(
-                   req.body
-                , function(error) {
+            return lol.update(
+                req.body
+                , function (error) {
                     if (error) {
-                      res.send({message:"Failed"});// The write failed...
+                        res.send({ message: "Failed" });// The write failed...
                     } else {
-                        res.send({message:"Success"});
-                      // Data saved successfully!
+                        res.send({ message: "Success" });
+                        // Data saved successfully!
                     }
-                  });
+                });
         }
 
         public getUserData(req: Request, res: Response, next: NextFunction): Promise<any> {
@@ -65,24 +66,71 @@ export namespace userController {
                     const lol = snapshot.val();
                     return lol;
                 }).catch(() => {
-                    console.log("error");
+                    //console.log("error");
                 });
         }
 
         public getUserContributions(req: Request, res: Response, next: NextFunction): Promise<any> {
             // var userId = firebase.auth().currentUser.uid;
 
-            console.log(req.params.completed)
-            const completed=req.params.completed=="fulfilled"?true:false;
-            return firebase.database().ref('/users/' + req.params.userId+'/request/')
-            .orderByChild('fulfilled').equalTo(completed)
+            //console.log(req.params.completed)
+            const completed = req.params.completed == "fulfilled" ? true : false;
+            return firebase.database().ref('/users/' + req.params.userId + '/request/')
+                .orderByChild('fulfilled').equalTo(completed)
                 .once('value')
                 .then(function (snapshot) {
                     const lol = snapshot.val();
                     return lol;
                 }).catch(() => {
-                    console.log("error");
+                    //console.log("error");
                 });
+        }
+
+        public done(req: Request, res: Response, next: NextFunction) {
+            // var userId = firebase.auth().currentUser.uid;
+
+            switch (req.body.message) {
+                case 'confirm':
+
+
+                    const request = {
+                        notification: {
+                            title: "Accepted",
+                            body: req.body,
+                            // click_action: "http://localhost:3000/confirm"
+                        },
+                        priority: "high",
+
+                        to: req.body.pushToken
+
+                    };
+
+
+                    axios.post('https://fcm.googleapis.com/fcm/send', request, {
+                        headers: { 'Authorization': "key=AIzaSyCflWmYSu16ICHrJrZTXoQkVpl9Yc3174k" }
+                    })
+                        ; break;
+                case 'decline':
+                    const request2 = {
+                        notification: {
+                            title: "Declined",
+                            body: req.body,
+                            // click_action: "http://localhost:3000/confirm"
+                        },
+                        priority: "high",
+
+                        to: req.body.pushToken
+
+                    };
+
+
+                    axios.post('https://fcm.googleapis.com/fcm/send', request2, {
+                        headers: { 'Authorization': "key=AIzaSyCflWmYSu16ICHrJrZTXoQkVpl9Yc3174k" }
+                    })
+                        ; break;
+                default:
+            }
+
         }
     }
 }

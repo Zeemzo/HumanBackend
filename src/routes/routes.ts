@@ -35,14 +35,14 @@ router.use("/user", auth, userAPI.router);
 router.post("/token", (req, res, next) => {
     admin.auth().getUserByEmail(req.body.email)
         .then((userRecord: any) => {
-            // console.log(userRecord)
+            // //console.log(userRecord)
             // See the UserRecord reference doc for the contents of userRecord.
-            //   console.log("Successfully fetched user data:", userRecord.toJSON());
+            //   //console.log("Successfully fetched user data:", userRecord.toJSON());
             var token = jwt.sign({ email: req.body.email }, process.env.SECRET);
             res.send({ token: token });
         })
         .catch((error: any) => {
-            //   console.log("Error fetching user data:", error);
+            //   //console.log("Error fetching user data:", error);
             res.send({ error: "Email is not authenticated!" });
 
         });
@@ -54,7 +54,7 @@ router.post("/push/token", (req, res, next) => {
     //    const email=req.body.email;
     //    const pushToken=req.body.pushToken;
     const controller = new userController.UserData;
-    console.log(req.body);
+    //console.log(req.body);
 
     controller.writeUserDataPush(req, res, next);
     // if (result) {
@@ -80,7 +80,7 @@ function auth(req: Request, res: Response, next: NextFunction) {
             return res.status(403).json({ err: "Authentication failed" });
         } else {
 
-            //  console.log(decodedToken);
+            //  //console.log(decodedToken);
 
             next();
         }
@@ -117,7 +117,7 @@ router.post("/adduser", (req: Request, res: Response, next: NextFunction) => {
     // if (result) {
     //     res.send("Done");
     // }
-    console.log(req.body);
+    //console.log(req.body);
 });
 
 export { router };

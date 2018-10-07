@@ -27,7 +27,7 @@ export namespace requestHandler {
                         arr.push(lol[key]);
                     }
                     // res.send(arr[0])
-                    console.log(arr)
+                    //console.log(arr)
                     match.needy = arr[0].userId;
                     match.needyEmail = arr[0].email
                     match.needyLoc = { lat: arr[0].latitude, lng: arr[0].longitude }
@@ -38,7 +38,7 @@ export namespace requestHandler {
                         .child('provision').orderByChild('matched').equalTo(false).limitToFirst(1)
                         .once('value')
                         .then((snapshot) => {
-                            // console.log(snapshot.val());
+                            // //console.log(snapshot.val());
                             const lol1 = (snapshot.val());
                             var arr1 = [];
                             for (var key in lol1) {
@@ -50,14 +50,14 @@ export namespace requestHandler {
                             match.giverLoc = { lat: arr1[0].latitude, lng: arr1[0].longitude }
                             match.giverId = arr1[0].id
 
-                            console.log(match)
+                            //console.log(match)
                             // res.send(match)
                             return firebase.database().ref('/matches/' + utc_timestamp + '/' + Id + '/').set(match)
                         }).catch(err => {
-                            console.log(err)
+                            //console.log(err)
                         });
                 }).catch(err => {
-                    console.log(err)
+                    //console.log(err)
                 });
         }
 
@@ -67,7 +67,7 @@ export namespace requestHandler {
 
             const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
             let Id = (new Date().getTime() / 1000 | 0).toString(16) + Math.ceil(Math.random() * 100000000000);
-            let match: any = { matchId: Id ,active:false}
+            let match: any = { matchId: Id ,active:false,fulfilled:false}
             // let obj=null;
 
             const needR = firebase.database().ref('/request/' + utc_timestamp)
@@ -87,7 +87,7 @@ export namespace requestHandler {
                             arr.push(lol[key]);
                         }
                         // res.send(arr[0])
-                        // console.log(arr)
+                        // //console.log(arr)
                         match.needy = arr[0].userId;
                         match.needyEmail = arr[0].email
                         match.needyLoc = { lat: arr[0].latitude, lng: arr[0].longitude }
@@ -101,7 +101,7 @@ export namespace requestHandler {
 
                         provisionR.once('value')
                             .then((snapshot) => {
-                                // console.log(snapshot.val());
+                                // //console.log(snapshot.val());
                                 const lol1 = (snapshot.val());
                                 var arr1 = [];
                                 for (var key in lol1) {
@@ -119,11 +119,11 @@ export namespace requestHandler {
                                 firebase.database()
                                     .ref('/users/' + arr1[0].userId + '/request/' + arr1[0].id).update({ matched: true })
 
-                                console.log(match)
+                                //console.log(match)
                                 // res.send(match)
 
                                 return firebase.database().ref('/matches/' + utc_timestamp + '/' + Id + '/').set(match).then(() => {
-                                    console.log("THE CRON HAS MATCHED REQUESTS!!!");
+                                    //console.log("THE CRON HAS MATCHED REQUESTS!!!");
                                 });
 
 
@@ -132,7 +132,7 @@ export namespace requestHandler {
                             )
                     })
             } else {
-                console.log("NO REQUESTS WERE MATCHED!!!");
+                //console.log("NO REQUESTS WERE MATCHED!!!");
             }
 
         }
@@ -148,7 +148,7 @@ export namespace requestHandler {
 
             return firebase.database().ref('/matches/' + utc_timestamp).orderByChild('active').equalTo(false).once('value').then((snapshot) => {
                 res.send(snapshot.val());
-            })
+            }).catch()
             // let obj=null;
 
 
@@ -180,8 +180,8 @@ export namespace requestHandler {
             // let match: any = { matchId: Id }
 
 
-            return firebase.database().ref('/matches/' + utc_timestamp+'/'+req.body.matchIyd).update(req.body).then((snapshot) => {
-                res.send(snapshot.val());
+            return firebase.database().ref('/matches/' + utc_timestamp+'/'+req.body.matchId).update(req.body).then(() => {
+                res.send({message:"done"});
             })
             // let obj=null;
 
@@ -199,7 +199,7 @@ export namespace requestHandler {
                 .child('need').orderByChild('requestType')
                 .once('value')
                 .then((snapshot) => {
-                    console.log(snapshot.val());
+                    //console.log(snapshot.val());
                     return snapshot.val();
                 });
 
@@ -216,22 +216,22 @@ export namespace requestHandler {
                 .child('need').orderByChild('requestType')
                 .once('value')
                 .then((snapshot) => {
-                    console.log(snapshot.val());
+                    //console.log(snapshot.val());
                     return snapshot.val();
                 });
 
 
         }
         public findNearbyMatchedrequest(latitude: number, longitude: number, type: string): void {
-            console.log("`operation2` is called ===");
+            //console.log("`operation2` is called ===");
 
-            console.log("==========================");
+            //console.log("==========================");
         }
 
         public matchTheseRequest(): void {
-            console.log("`operation2` is called ===");
+            //console.log("`operation2` is called ===");
 
-            console.log("==========================");
+            //console.log("==========================");
         }
 
     }

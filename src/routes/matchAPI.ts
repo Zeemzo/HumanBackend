@@ -14,7 +14,7 @@ router.get("/getmatches", (req: Request, res: Response, next: NextFunction) => {
         }).catch((err) => {
             // reject(err);
         });;
-        // console.log(req.body);
+        // //console.log(req.body);
     })
     // if (result) {
     //     res.send("Done");
@@ -34,7 +34,7 @@ router.get("/getactivematches", (req: Request, res: Response, next: NextFunction
         }).catch((err) => {
             // reject(err);
         });;
-        // console.log(req.body);
+        // //console.log(req.body);
     })
     // if (result) {
     //     res.send("Done");
@@ -54,13 +54,16 @@ router.post("/updatematchrequest", (req: Request, res: Response, next: NextFunct
         }).catch((err) => {
             // reject(err);
         });;
-        // console.log(req.body);
+        // //console.log(req.body);
     })
     // if (result) {
     //     res.send("Done");
     // }
     
 });
+
+
+
 
 // router.post("/accept", (req: Request, res: Response, next: NextFunction) => {
 //     const controller = new requestController.RequestData;
@@ -74,7 +77,7 @@ router.post("/updatematchrequest", (req: Request, res: Response, next: NextFunct
 //         }).catch((err) => {
 //             reject(err);
 //         });;
-//         // console.log(req.body);
+//         // //console.log(req.body);
 //     })
 //     // if (result) {
 //     //     res.send("Done");

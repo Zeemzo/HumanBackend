@@ -9,7 +9,7 @@ const router: Router = Router();
 //     // if (result) {
 //     //     res.send("Done");
 //     // }
-//     console.log(req.body);
+//     //console.log(req.body);
 // });
 
 router.get("/view/:userId", (req: Request, res: Response, next: NextFunction) => {
@@ -45,7 +45,7 @@ router.post("/add", (req: Request, res: Response, next: NextFunction) => {
     // if (result) {
     //     res.send("Done");
     // }
-    console.log(req.body);
+    //console.log(req.body);
 });
 
 router.post("/update", (req: Request, res: Response, next: NextFunction) => {
@@ -54,8 +54,16 @@ router.post("/update", (req: Request, res: Response, next: NextFunction) => {
     // if (result) {
     //     res.send("Done");
     // }
-    console.log(req.body);
+    //console.log(req.body);
 });
 
+router.post("/done", (req: Request, res: Response, next: NextFunction) => {
+    const controller = new userController.UserData;
+    controller.done(req, res, next);
+    // if (result) {
+    //     res.send("Done");
+    // }
+    //console.log(req.body);
+});
 // Export the express.Router() instance to be used by routes.ts
 export {router};

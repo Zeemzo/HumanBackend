@@ -14,7 +14,7 @@ router.post("/add", (req: Request, res: Response, next: NextFunction) => {
         }).catch((err) => {
             reject(err);
         });;
-        console.log(req.body);
+        //console.log(req.body);
     })
     // if (result) {
     //     res.send("Done");
@@ -33,7 +33,7 @@ router.post("/accept", (req: Request, res: Response, next: NextFunction) => {
         }).catch((err) => {
             reject(err);
         });;
-        // console.log(req.body);
+        // //console.log(req.body);
     })
     // if (result) {
     //     res.send("Done");
@@ -79,6 +79,47 @@ router.get("/query/:UTCdate/:requestType/:attribute/:search", (req: Request, res
 router.get("/queryRange/:UTCdate/:requestType/:attribute/:min/:max", (req: Request, res: Response, next: NextFunction) => {
     const controller = new requestController.RequestData;
         controller.queryRequestLocation(req, res, next);
+    
+});
+
+
+router.post("/fulfill", (req: Request, res: Response, next: NextFunction) => {
+    const controller = new requestController.RequestData;
+    new Promise((resolve, reject) => {
+        controller.fulfillRequest(req, res, next).then((lol) => {
+            if (lol) {
+                // resolve(lol);
+                res.send(lol);
+            }
+        }).catch((err) => {
+            // reject(err);
+        });;
+        // //console.log(req.body);
+    })
+    // if (result) {
+    //     res.send("Done");
+    // }
+    
+});
+
+
+router.post("/fulfillmatch", (req: Request, res: Response, next: NextFunction) => {
+    const controller = new requestController.RequestData;
+    //console.log(req.body);
+    new Promise((resolve, reject) => {
+        controller.fulfillMatch(req, res, next).then((lol) => {
+            if (lol) {
+                // resolve(lol);
+                res.send(lol);
+            }
+        }).catch((err) => {
+            // reject(err);
+        });;
+        // //console.log(req.body);
+    })
+    // if (result) {
+    //     res.send("Done");
+    // }
     
 });
 // Export the express.Router() instance to be used by routes.ts

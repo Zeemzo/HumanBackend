@@ -101,7 +101,7 @@ export namespace requestHandler {
 
                         provisionR.once('value')
                             .then((snapshot) => {
-                                // //console.log(snapshot.val());
+                                console.log(snapshot.val());
                                 const lol1 = (snapshot.val());
                                 var arr1 = [];
                                 for (var key in lol1) {
@@ -123,7 +123,7 @@ export namespace requestHandler {
                                 // res.send(match)
 
                                 return firebase.database().ref('/matches/' + utc_timestamp + '/' + Id + '/').set(match).then(() => {
-                                    //console.log("THE CRON HAS MATCHED REQUESTS!!!");
+                                    console.log("THE CRON HAS MATCHED REQUESTS!!!");
                                 });
 
 
@@ -132,7 +132,7 @@ export namespace requestHandler {
                             )
                     })
             } else {
-                //console.log("NO REQUESTS WERE MATCHED!!!");
+                console.log("NO REQUESTS WERE MATCHED!!!");
             }
 
         }
@@ -146,7 +146,7 @@ export namespace requestHandler {
             // let match: any = { matchId: Id }
 
 
-            return firebase.database().ref('/matches/' + utc_timestamp).orderByChild('active').equalTo(false).once('value').then((snapshot) => {
+            return firebase.database().ref('/matches/' + utc_timestamp).orderByChild('fulfilled').equalTo(false).once('value').then((snapshot) => {
                 res.send(snapshot.val());
             }).catch()
             // let obj=null;

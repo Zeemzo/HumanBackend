@@ -193,7 +193,7 @@ export namespace requestController {
                     const request = {
                         notification: {
                             title: "You have a message from a fellow Human",
-                            body: "" + req.body.roomId,
+                            body: {roomId:req.body.roomId,sender:req.body.sender} ,
                             click_action: "https://human-24b1b.firebaseapp.com/chat"
                         },
                         priority : "high",

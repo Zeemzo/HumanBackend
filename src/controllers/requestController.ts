@@ -246,7 +246,7 @@ export namespace requestController {
             // let list = "";
            
             return firebase.database().ref('/matches/' +utc_timestamp+'/'+ req.body.matchId )
-            .update({fulfilled:true,active:false}).then((lol)=>{
+            .update({fulfilled:true}).then((lol)=>{
                 res.send({message:'done'})
             }).catch()
                   

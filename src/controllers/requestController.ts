@@ -195,8 +195,8 @@ export namespace requestController {
                             title: "You have a message from a fellow Human",
                             body: {
                                 roomId: req.body.roomId,
-                                sender: req.body.sender,
-                                senderId: req.body.senderId
+                                sender: [req.body.sender],
+                                senderId: [req.body.senderId]
                             },
                             click_action: "https://human-24b1b.firebaseapp.com/chat"
                         },

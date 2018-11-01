@@ -13,7 +13,7 @@ export namespace requestController {
             // var priority = firebase.firestore.QuerySnapshot;
             // let old: any = [];
             const request = req.body;
-            request.id=Id;
+            request.id = Id;
             const now = new Date;
 
             const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
@@ -22,13 +22,13 @@ export namespace requestController {
             // const dateId =  ""+new Date().toDateString();
             const addddd = '/request/' + utc_timestamp + '/' + req.body.requestType + '/' + Id + '/';
             // //console.log(addddd);
-            request.datestamp=utc_timestamp
+            request.datestamp = utc_timestamp
 
             return firebase.database().ref(addddd)
                 .set(request)
                 .then(
                     (snapshot) => {
-                        firebase.database().ref('users/'+req.body.userId+'/request/'+Id+'/').set(request,()=>{
+                        firebase.database().ref('users/' + req.body.userId + '/request/' + Id + '/').set(request, () => {
                             return res.json({ message: "done" });
 
                         })
@@ -47,8 +47,8 @@ export namespace requestController {
         public getAllRequest(req: Request, res: Response, next: NextFunction): Promise<any> {
             // var userId = firebase.auth().currentUser.uid;
 
-            return firebase.database().ref('/request/' + req.params.UTCdate + '/' + req.params.requestType + '/') 
-            .orderByChild('status').equalTo(false)
+            return firebase.database().ref('/request/' + req.params.UTCdate + '/' + req.params.requestType + '/')
+                .orderByChild('status').equalTo(false)
                 .once('value')
                 .then(function (snapshot) {
                     const lol = snapshot.val();
@@ -82,14 +82,14 @@ export namespace requestController {
                 .child(req.params.requestType).orderByChild(req.params.attribute).equalTo(req.params.search)
                 .once('value')
                 .then((snapshot) => {
-                    const lol=snapshot.val();
+                    const lol = snapshot.val();
                     var arr = [];
                     for (var key in lol) {
-                      lol[key].id = key;
-                      arr.push(lol[key]);
+                        lol[key].id = key;
+                        arr.push(lol[key]);
                     }
                     res.send(arr[0])
-                    
+
                     //console.log(snapshot.val());
                 });
 
@@ -113,7 +113,7 @@ export namespace requestController {
 
         }
 
-        
+
         public fulfillRequest(req: Request, res: Response, next: NextFunction): Promise<any> {
             // var userId = firebase.auth().currentUser.uid;
             // //console.log("lol");
@@ -136,7 +136,7 @@ export namespace requestController {
                             body: req.body,
                             click_action: "https://human-24b1b.firebaseapp.com/confirm"
                         },
-                        priority : "high",
+                        priority: "high",
 
                         to: pushToken
 
@@ -149,17 +149,17 @@ export namespace requestController {
                         // //console.log(res);
                         // res.send(r);
                         return firebase.database().ref('/request/' + utc_timestamp + '/' + req.body.requestType + '/' + req.body.id)
-                            
-                                    .update({fulfilled:true}).then((snapshot)=>{
-                                        
-                                        return firebase.database().ref('/users/' + req.body.userId +'/request/'+req.body.id)
-                                        .update({fulfilled:true}).then((lol)=>{
-                                            res.send({message:'done'})
-                                        }).catch()
 
-                                    })
+                            .update({ fulfilled: true }).then((snapshot) => {
 
-                         
+                                return firebase.database().ref('/users/' + req.body.userId + '/request/' + req.body.id)
+                                    .update({ fulfilled: true }).then((lol) => {
+                                        res.send({ message: 'done' })
+                                    }).catch()
+
+                            })
+
+
                     }
 
                     ).catch((err) => {
@@ -193,10 +193,14 @@ export namespace requestController {
                     const request = {
                         notification: {
                             title: "You have a message from a fellow Human",
-                            body: {roomId:req.body.roomId,sender:req.body.sender} ,
+                            body: {
+                                roomId: req.body.roomId,
+                                sender: req.body.sender,
+                                senderId: req.body.senderId
+                            },
                             click_action: "https://human-24b1b.firebaseapp.com/chat"
                         },
-                        priority : "high",
+                        priority: "high",
 
                         to: pushToken
 
@@ -213,9 +217,9 @@ export namespace requestController {
                                 const br = snapshot.val()
                                 //console.log(br);
                                 br.status = true;
-                                br.matched=true;
+                                br.matched = true;
                                 return firebase.database().ref('/request/' + utc_timestamp + '/' + req.body.requestType + '/' + req.body.id)
-                                    .set(br).then((snapshot)=>{
+                                    .set(br).then((snapshot) => {
                                         res.send(r);
                                     })
 
@@ -237,25 +241,25 @@ export namespace requestController {
         }
 
 
-        
+
         public fulfillMatch(req: Request, res: Response, next: NextFunction): Promise<any> {
             // var userId = firebase.auth().currentUser.uid;
             const now = new Date;
 
             const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
             // let list = "";
-           
-            return firebase.database().ref('/matches/' +utc_timestamp+'/'+ req.body.matchId )
-            .update({fulfilled:true}).then((lol)=>{
-                res.send({message:'done'})
-            }).catch()
-                  
+
+            return firebase.database().ref('/matches/' + utc_timestamp + '/' + req.body.matchId)
+                .update({ fulfilled: true }).then((lol) => {
+                    res.send({ message: 'done' })
+                }).catch()
+
 
 
 
 
 
         }
-      
+
     }
 }

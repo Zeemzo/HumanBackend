@@ -70,6 +70,19 @@ export namespace userController {
                 });
         }
 
+        public getUserImage(req: Request, res: Response, next: NextFunction): Promise<any> {
+            // var userId = firebase.auth().currentUser.uid;
+
+            return firebase.database().ref('/users/' + req.params.userId)
+                .once('value')
+                .then(function (snapshot) {
+                    const lol = snapshot.val();
+                    return lol.image;
+                }).catch(() => {
+                    //console.log("error");
+                });
+        }
+
         public getUserContributions(req: Request, res: Response, next: NextFunction): Promise<any> {
             // var userId = firebase.auth().currentUser.uid;
 

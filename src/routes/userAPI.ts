@@ -25,6 +25,18 @@ router.get("/view/:userId", (req: Request, res: Response, next: NextFunction) =>
     });
 });
 
+router.get("/viewImage/:userId", (req: Request, res: Response, next: NextFunction) => {
+    const controller = new userController.UserData;
+   new Promise((resolve, reject) => {
+        controller.getUserImage(req, res, next)
+            .then((lol) => {
+                resolve();
+                res.send(lol);
+            }).catch(() => {
+                reject();
+            });
+    });
+});
 
 
 

@@ -76,6 +76,24 @@ export namespace requestController {
                     //console.log("error");
                 });
         }
+
+
+        public getAcceptedRequest(req: Request, res: Response, next: NextFunction): Promise<any> {
+            // var userId = firebase.auth().currentUser.uid;
+            return firebase.database().ref('/users/' + req.params.userId + '/accepted/')
+                .once('value')
+                .then(function (snapshot) {
+                    const lol = snapshot.val();
+                    // console.log(lol);
+                    return lol;
+
+
+                    // return list;
+                }).catch(() => {
+                    //console.log("error");
+                });
+        }
+
         public queryRequest(req: Request, res: Response, next: NextFunction): Promise<any> {
 
             return firebase.database().ref('/request/' + req.params.UTCdate)
@@ -178,6 +196,7 @@ export namespace requestController {
         public acceptRequest(req: Request, res: Response, next: NextFunction): Promise<any> {
             // var userId = firebase.auth().currentUser.uid;
             const now = new Date;
+            let Id = (new Date().getTime() / 1000 | 0).toString(16) + Math.ceil(Math.random() * 100000000000);
 
             const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
             // let list = "";
@@ -220,7 +239,13 @@ export namespace requestController {
                                 br.matched = true;
                                 return firebase.database().ref('/request/' + utc_timestamp + '/' + req.body.requestType + '/' + req.body.id)
                                     .set(br).then((snapshot) => {
-                                        res.send(r);
+
+                                        return firebase.database().ref('/users/' + req.body.senderId + '/accepted/'+ Id)
+                                        .set(br).then((snapshot) => {
+    
+                                            
+                                            res.send(r);
+                                        })
                                     })
 
                             })

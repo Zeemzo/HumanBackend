@@ -58,7 +58,7 @@ export namespace requestHandler {
                                 match.provision=arr1[0]
 
                                 firebase.database()
-                                    .ref('/request/' + utc_timestamp + '/provision/' + arr1[0].id).update({ matched: true })
+                                    .ref('/request/' + utc_timestamp + '/provision/' + arr1[0].id) .update({ matched: true })
                                 firebase.database()
                                     .ref('/users/' + arr1[0].userId + '/request/' + arr1[0].id).update({ matched: true })
 

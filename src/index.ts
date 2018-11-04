@@ -25,8 +25,8 @@ app.use(function(req, res, next) {
     next();
   });
   app.use(cors({
-    "origin": "https://human-24b1b.firebaseapp.com",
-    // "origin": "http://localhost:3000",
+    // "origin": "https://human-24b1b.firebaseapp.com",
+    "origin": "http://localhost:3000",
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
     "preflightContinue": false,
     "optionsSuccessStatus": 204
@@ -50,18 +50,16 @@ app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}/`);
 });
 
-cron.schedule("* */1 * * *", function() {
-  const controller = new requestHandler.matchData;
-    new Promise((resolve, reject) => {
-        controller.matchRequestV2();
+// cron.schedule("* */1 * * *", function() {
+//   const controller = new requestHandler.matchData;
+//     new Promise((resolve, reject) => {
+//         controller.matchRequestV2();
         
-          console.log("THE CRON HAS MATCHED REQUESTS!!!");
+//           console.log("THE CRON HAS MATCHED REQUESTS!!!");
       
         
-    })
-});
-
-
+//     })
+// });
 
 
 export default app;

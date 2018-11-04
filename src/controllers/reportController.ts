@@ -78,6 +78,36 @@ export namespace reportController {
 
 
         }
+        public acceptedLeaderboard(req: Request, res: Response, next: NextFunction): Promise<any> {
+            // var userId = firebase.auth().currentUser.uid;
+            const now = new Date;
+            // let list = "";
+
+            return firebase.database().ref('/users/').once('value').then(snapshot => {
+                const lol = snapshot.val();
+                var arr = [];
+                for (var key in lol) {
+                    lol[key].id = key;
+                    arr.push(lol[key]);
+                }
+                // res.send(arr)
+                var report = [];
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].accepted != null) {
+                        report.push({ label: arr[i].username, value: Object.keys(arr[i].accepted).length })
+
+                    } else {
+                        report.push({ label: arr[i].username, value: 0 })
+
+                    }
+                }
+                res.send(report)
+
+            }).catch(() => { })
+
+        }
 
     }
+
+    
 }

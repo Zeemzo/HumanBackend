@@ -25,8 +25,8 @@ app.use(function(req, res, next) {
     next();
   });
   app.use(cors({
-    // "origin": "https://human-24b1b.firebaseapp.com",
-    "origin": "http://localhost:3000",
+    "origin": "https://human-24b1b.firebaseapp.com",
+    // "origin": "http://localhost:3000",
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
     "preflightContinue": false,
     "optionsSuccessStatus": 204

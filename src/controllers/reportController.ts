@@ -82,7 +82,6 @@ export namespace reportController {
             // var userId = firebase.auth().currentUser.uid;
             const now = new Date;
             // let list = "";
-
             return firebase.database().ref('/users/').once('value').then(snapshot => {
                 const lol = snapshot.val();
                 var arr = [];
@@ -95,19 +94,47 @@ export namespace reportController {
                 for (var i = 0; i < arr.length; i++) {
                     if (arr[i].accepted != null) {
                         report.push({ label: arr[i].username, value: Object.keys(arr[i].accepted).length })
-
                     } else {
                         report.push({ label: arr[i].username, value: 0 })
-
                     }
                 }
                 res.send(report)
-
             }).catch(() => { })
-
         }
-
+        public provisionLeaderboard(req: Request, res: Response, next: NextFunction): Promise<any> {
+            // var userId = firebase.auth().currentUser.uid;
+            const now = new Date;
+            // let list = "";
+            return firebase.database().ref('/users/').once('value').then(snapshot => {
+                const lol = snapshot.val();
+                var arr = [];
+                for (var key in lol) {
+                    lol[key].id = key;
+                    arr.push(lol[key]);
+                }
+                // res.send(arr)
+                var report = [];
+                var reqIds = [];
+                // var count;
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].request != null) {
+                        let count=0;
+                        // console.log(Object.keys(arr[i].request))
+                        reqIds = Object.keys(arr[i].request)
+                        for(var j=0;j<reqIds.length;j++){
+                            // console.log()
+                            if(arr[i].request[reqIds[j]].requestType=="provision"){
+                                count ++;
+                            }
+                        }
+                        report.push({ label: arr[i].username, value: count })
+                        // report.push({ label: arr[i].username, value: Object.keys(arr[i].request).length })
+                    } else {
+                        report.push({ label: arr[i].username, value: 0 })
+                    }
+                }
+                res.send(report)
+            }).catch(() => { })
+        }
     }
-
-    
 }

@@ -166,7 +166,7 @@ export namespace requestController {
                     }).then((r) => {
                         // //console.log(res);
                         // res.send(r);
-                        return firebase.database().ref('/request/' + utc_timestamp + '/' + req.body.requestType + '/' + req.body.id)
+                        return firebase.database().ref('/request/' + req.body.datestamp + '/' + req.body.requestType + '/' + req.body.id)
 
                             .update({ fulfilled: true }).then((snapshot) => {
 
@@ -191,6 +191,28 @@ export namespace requestController {
 
 
 
+        }
+
+        public fulfillSelfRequest(req: Request, res: Response, next: NextFunction): Promise<any> {
+            // var userId = firebase.auth().currentUser.uid;
+            // //console.log("lol");
+            const now = new Date;
+
+            const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+            // let list = "";
+
+            const lol = firebase.auth();
+           
+                        return firebase.database().ref('/request/' + req.body.datestamp + '/' + req.body.requestType + '/' + req.body.id)
+
+                            .update({ fulfilled: true }).then((snapshot) => {
+
+                                return firebase.database().ref('/users/' + req.body.userId + '/request/' + req.body.id)
+                                    .update({ fulfilled: true }).then((lol) => {
+                                        res.send({ message: 'done' })
+                                    }).catch()
+
+                            })
         }
 
         public acceptRequest(req: Request, res: Response, next: NextFunction): Promise<any> {
@@ -231,13 +253,13 @@ export namespace requestController {
                     }).then((r) => {
                         // //console.log(res);
                         // res.send(r);
-                        return firebase.database().ref('/request/' + utc_timestamp + '/' + req.body.requestType + '/' + req.body.id)
+                        return firebase.database().ref('/request/' + req.body.datestamp + '/' + req.body.requestType + '/' + req.body.id)
                             .once('value').then((snapshot) => {
                                 const br = snapshot.val()
                                 //console.log(br);
                                 br.status = true;
                                 br.matched = true;
-                                return firebase.database().ref('/request/' + utc_timestamp + '/' + req.body.requestType + '/' + req.body.id)
+                                return firebase.database().ref('/request/' + req.body.datestamp + '/' + req.body.requestType + '/' + req.body.id)
                                     .set(br).then((snapshot) => {
 
                                         return firebase.database().ref('/users/' + req.body.senderId + '/accepted/'+ Id)
@@ -274,7 +296,7 @@ export namespace requestController {
             const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
             // let list = "";
 
-            return firebase.database().ref('/matches/' + utc_timestamp + '/' + req.body.matchId)
+            return firebase.database().ref('/matches/' + req.body.datestamp + '/' + req.body.matchId)
                 .update({ fulfilled: true }).then((lol) => {
                     res.send({ message: 'done' })
                 }).catch()

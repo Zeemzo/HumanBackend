@@ -65,25 +65,13 @@ router.post("/updatematchrequest", (req: Request, res: Response, next: NextFunct
 
 
 
-// router.post("/accept", (req: Request, res: Response, next: NextFunction) => {
-//     const controller = new requestController.RequestData;
-//     new Promise((resolve, reject) => {
-//         controller.acceptRequest(req, res, next)
-//         .then((lol) => {
-//             // if (lol) {
-//                 resolve(lol);
-//                 res.send(lol);
-//             // }
-//         }).catch((err) => {
-//             reject(err);
-//         });;
-//         // //console.log(req.body);
-//     })
-//     // if (result) {
-//     //     res.send("Done");
-//     // }
+router.get("/match", (req: Request, res: Response, next: NextFunction) => {
+    // const controller = new requestHandler.matchData;
+    // // new Promise((resolve, reject) => {
+    //     controller.matchRequestV3(req, res, next)
+   
     
-// });
+});
 
 // router.get("/getall/:UTCdate/:requestType", (req: Request, res: Response, next: NextFunction) => {
 //     const controller = new requestController.RequestData;

@@ -236,8 +236,8 @@ export namespace requestController {
                             title: "You have a message from a fellow Human",
                             body: {
                                 roomId: req.body.roomId,
-                                sender: [req.body.sender],
-                                senderId: [req.body.senderId]
+                                sender: req.body.sender,
+                                senderId: req.body.senderId
                             },
                             click_action: "https://human-24b1b.firebaseapp.com/chat"
                         },
@@ -262,7 +262,7 @@ export namespace requestController {
                                 return firebase.database().ref('/request/' + req.body.datestamp + '/' + req.body.requestType + '/' + req.body.id)
                                     .set(br).then((snapshot) => {
 
-                                        return firebase.database().ref('/users/' + req.body.senderId + '/accepted/'+ Id)
+                                        return firebase.database().ref('/users/' + req.body.senderId[0] + '/accepted/'+ Id)
                                         .set(br).then((snapshot) => {
     
                                             

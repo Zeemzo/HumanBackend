@@ -83,11 +83,11 @@ export namespace requestHandler {
             const now = new Date;
             const utc_timestamp = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
             let Id = (new Date().getTime() / 1000 | 0).toString(16) + Math.ceil(Math.random() * 100000000000);
-            let match: any = { matchId: Id, active: false, fulfilled: false ,datestamp:utc_timestamp}
+            let match: any = { matchId: Id, active: false, fulfilled: false, datestamp: utc_timestamp }
             let needArr: any = [];
             let provisionArr: any = [];
-            var i=0;
-            var j=0;
+            var i = 0;
+            var j = 0;
 
             const needR = firebase.database().ref('/request/' + utc_timestamp)
                 .child('need').orderByChild('matched').equalTo(false)
@@ -157,14 +157,50 @@ export namespace requestHandler {
                                                                             .update({ matched: true }).then(() => {
                                                                                 // console.log("provision updated")
 
-                                                                                return firebase.database()
+                                                                                firebase.database()
                                                                                     .ref('/matches/' + utc_timestamp + '/' + Id + '/')
                                                                                     .set(match).then(() => {
+                                                                                        return firebase.database().ref('/users/').once('value').then(snapshot => {
+                                                                                            const lol = snapshot.val();
+                                                                                            var arr = [];
+                                                                                            for (var key in lol) {
+                                                                                                lol[key].id = key;
+                                                                                                arr.push(lol[key]);
+                                                                                            }
+                                                                                       
+                                                                                            // var count;
+                                                                                            for (var i = 0; i < arr.length; i++) {
+                                                                                                if (arr[i].role == "CONTRIBUTOR") {
+                                                                                                    const pushToken = arr[i].pushToken;
+                                                                                                    const request = {
+                                                                                                        notification: {
+                                                                                                            title: "New Matched Request Available",
+                                                                                                            body:"",
+                                                                                                            click_action: "https://human-24b1b.firebaseapp.com/feed"
+                                                                                                        },
+                                                                                                        priority: "high",
 
-                                                                                        console.log("THE CRON HAS MATCHED REQUESTS!!!");
+                                                                                                        to: pushToken
+
+                                                                                                    };
+
+
+                                                                                                    axios.post('https://fcm.googleapis.com/fcm/send', request, {
+                                                                                                        headers: { 'Authorization': "key=AIzaSyCflWmYSu16ICHrJrZTXoQkVpl9Yc3174k" }
+                                                                                                    }).then(()=>{
+                                                                                                        console.log("Alerted Contributors!!!");
+
+                                                                                                    })
+                                                                                                }
+                                                                                            }
+
+
+                                                                                        }).catch(() => { })
+                                                                                            console.log("THE CRON HAS MATCHED REQUESTS!!!");
+
                                                                                         // return res.send(match)
                                                                                     });
-                                                                                
+
                                                                             })
                                                                     })
                                                             })
@@ -173,7 +209,7 @@ export namespace requestHandler {
                                             } else {
                                                 console.log("NO REQUESTS WERE MATCHED!!!");
                                                 // return res.send({message:"no matches"})
-            
+
                                             }
                                         }
                                     }
@@ -231,8 +267,8 @@ export namespace requestHandler {
 
 
             return firebase.database().ref('/matches/' + utc_timestamp + '/' + req.body.matchId).update(req.body).then(() => {
-                return firebase.database().ref('/users/' + req.body.contributor+'/matches/'+req.body.matchId).set(req.body).then(() => {
-                
+                return firebase.database().ref('/users/' + req.body.contributor + '/matches/' + req.body.matchId).set(req.body).then(() => {
+
                     res.send({ message: "done" });
                 })
                 // res.send({ message: "done" });

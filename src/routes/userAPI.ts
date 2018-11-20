@@ -46,6 +46,19 @@ router.get("/viewImage/:userId", (req: Request, res: Response, next: NextFunctio
     });
 });
 
+router.get("/getChat/:userId", (req: Request, res: Response, next: NextFunction) => {
+    const controller = new userController.UserData;
+   new Promise((resolve, reject) => {
+        controller.getUserChat(req, res, next)
+            .then((lol) => {
+                resolve();
+                res.send(lol);
+            }).catch(() => {
+                reject();
+            });
+    });
+});
+
 
 
 router.get("/contributions/:userId/:completed", (req: Request, res: Response, next: NextFunction) => {
@@ -73,6 +86,16 @@ router.post("/add", (req: Request, res: Response, next: NextFunction) => {
 router.post("/update", (req: Request, res: Response, next: NextFunction) => {
     const controller = new userController.UserData;
     controller.updateUserData(req, res, next);
+    // if (result) {
+    //     res.send("Done");
+    // }
+    //console.log(req.body);
+});
+
+
+router.post("/updateChat", (req: Request, res: Response, next: NextFunction) => {
+    const controller = new userController.UserData;
+    controller.updateUserChat(req, res, next);
     // if (result) {
     //     res.send("Done");
     // }

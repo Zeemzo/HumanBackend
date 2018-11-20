@@ -56,6 +56,45 @@ export namespace userController {
                     }
                 });
         }
+        public updateUserChat(req: Request, res: Response, next: NextFunction) {
+            // var userId = firebase.auth().currentUser.uid;
+
+            // const pushToken=req.body.pushToken;
+            const lol = firebase.database()
+                .ref('users/' + req.body.userId+"/chat");
+                lol.once('value')
+                .then(function (snapshot) {
+                    const bull = snapshot.val();
+                    if(bull!=null){
+                        return lol.update(
+                            req.body
+                            , function (error) {
+                                if (error) {
+                                    res.send({ message: "Failed" });// The write failed...
+                                } else {
+                                    res.send({ message: "Success" });
+                                    // Data saved successfully!
+                                }
+                            });
+                    }else{
+                        return lol.set(
+                            req.body
+                            , function (error) {
+                                if (error) {
+                                    res.send({ message: "Failed" });// The write failed...
+                                } else {
+                                    res.send({ message: "Success" });
+                                    // Data saved successfully!
+                                }
+                            });
+                    }
+                   
+                }).catch(() => {
+                    //console.log("error");
+                });
+
+            
+        }
 
         public getUserData(req: Request, res: Response, next: NextFunction): Promise<any> {
             // var userId = firebase.auth().currentUser.uid;
@@ -90,6 +129,20 @@ export namespace userController {
             const completed = req.params.completed == "fulfilled" ? true : false;
             return firebase.database().ref('/users/' + req.params.userId + '/request/')
                 .orderByChild('fulfilled').equalTo(completed)
+                .once('value')
+                .then(function (snapshot) {
+                    const lol = snapshot.val();
+                    return lol;
+                }).catch(() => {
+                    //console.log("error");
+                });
+        }
+
+        public getUserChat(req: Request, res: Response, next: NextFunction): Promise<any> {
+            // var userId = firebase.auth().currentUser.uid;
+
+            //console.log(req.params.completed)
+            return firebase.database().ref('/users/' + req.params.userId + '/chat/')
                 .once('value')
                 .then(function (snapshot) {
                     const lol = snapshot.val();

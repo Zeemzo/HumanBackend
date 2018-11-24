@@ -61,22 +61,29 @@ export namespace userController {
 
             // const pushToken=req.body.pushToken;
             const lol = firebase.database()
-                .ref('users/' + req.body.userId+"/chat");
-                lol.once('value')
+                .ref('users/' + req.body.userId + "/chat");
+            lol.once('value')
                 .then(function (snapshot) {
                     const bull = snapshot.val();
-                    if(bull!=null){
-                        return lol.update(
-                            req.body
-                            , function (error) {
-                                if (error) {
-                                    res.send({ message: "Failed" });// The write failed...
-                                } else {
-                                    res.send({ message: "Success" });
-                                    // Data saved successfully!
-                                }
-                            });
-                    }else{
+                    if (bull != null) {
+                        console.log(bull.chat.length)
+                        console.log(req.body.chat.length)
+                        if (req.body.chat.length > bull.chat.length) {
+                            return lol.update(
+                                req.body
+                                , function (error) {
+                                    if (error) {
+                                        res.send({ message: "Failed" });// The write failed...
+                                    } else {
+                                        res.send({ message: "Success" });
+                                        // Data saved successfully!
+                                    }
+                                });
+                        }else{
+                            res.send({ message: "Success" });
+                        }
+                      
+                    } else {
                         return lol.set(
                             req.body
                             , function (error) {
@@ -88,12 +95,12 @@ export namespace userController {
                                 }
                             });
                     }
-                   
+
                 }).catch(() => {
                     //console.log("error");
                 });
 
-            
+
         }
 
         public getUserData(req: Request, res: Response, next: NextFunction): Promise<any> {

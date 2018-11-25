@@ -39,6 +39,41 @@ export namespace requestController {
 
         }
 
+        public updateRequestData(req: Request, res: Response, next: NextFunction): Promise<any> {
+            // var priority = firebase.firestore.QuerySnapshot;
+            // let old: any = [];
+            const request = req.body;
+            // const dateId =  ""+new Date().toDateString();
+            const addddd = '/request/' + req.body.datestamp + '/' + req.body.requestType + '/' + req.body.id + '/';
+            // //console.log(addddd);
+            // var snappy:any;
+            return firebase.database().ref(addddd).once("value").then(snapshot=>{
+                var snappy=snapshot.val()
+                if (!snappy.status) {
+                    return firebase.database().ref(addddd)
+                        .update(request, () => {
+                            return firebase.database().ref('users/' + req.body.userId + '/request/' + req.body.id + '/')
+                                .update(request, () => {
+                                    return res.json({ message: "done" });
+    
+                                })
+                        }
+                        ).catch((err) => {
+                            return res.json({ err: err })
+                        });
+    
+                } else {
+                    res.json({ message: "Failed! Request is already accepted" });
+    
+                }
+            }).catch((err) => {
+                return res.json({ err: err })
+            });
+
+            
+
+
+        }
         // public updateRequestData(req: Request, res: Response, next: NextFunction): Promise<boolean> {
         //     // let Id = (new Date().getTime() / 1000 | 0).toString(16) + Math.ceil(Math.random() * 100000000000);
 
@@ -202,17 +237,17 @@ export namespace requestController {
             // let list = "";
 
             const lol = firebase.auth();
-           
-                        return firebase.database().ref('/request/' + req.body.datestamp + '/' + req.body.requestType + '/' + req.body.id)
 
-                            .update({ fulfilled: true }).then((snapshot) => {
+            return firebase.database().ref('/request/' + req.body.datestamp + '/' + req.body.requestType + '/' + req.body.id)
 
-                                return firebase.database().ref('/users/' + req.body.userId + '/request/' + req.body.id)
-                                    .update({ fulfilled: true }).then((lol) => {
-                                        res.send({ message: 'done' })
-                                    }).catch()
+                .update({ fulfilled: true }).then((snapshot) => {
 
-                            })
+                    return firebase.database().ref('/users/' + req.body.userId + '/request/' + req.body.id)
+                        .update({ fulfilled: true }).then((lol) => {
+                            res.send({ message: 'done' })
+                        }).catch()
+
+                })
         }
 
         public acceptRequest(req: Request, res: Response, next: NextFunction): Promise<any> {
@@ -239,7 +274,7 @@ export namespace requestController {
                                 sender: req.body.sender,
                                 senderId: req.body.senderId
                             },
-                            click_action: "https://human-24b1b.firebaseapp.com/chat"
+                            click_action: "https://human-24b1b.firebaseapp.com/message"
                         },
                         priority: "high",
 
@@ -262,12 +297,12 @@ export namespace requestController {
                                 return firebase.database().ref('/request/' + req.body.datestamp + '/' + req.body.requestType + '/' + req.body.id)
                                     .set(br).then((snapshot) => {
 
-                                        return firebase.database().ref('/users/' + req.body.senderId[0] + '/accepted/'+ Id)
-                                        .set(br).then((snapshot) => {
-    
-                                            
-                                            res.send(r);
-                                        })
+                                        return firebase.database().ref('/users/' + req.body.senderId[0] + '/accepted/' + Id)
+                                            .set(br).then((snapshot) => {
+
+
+                                                res.send(r);
+                                            })
                                     })
 
                             })

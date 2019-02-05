@@ -274,7 +274,7 @@ export namespace requestController {
                                 sender: req.body.sender,
                                 senderId: req.body.senderId
                             },
-                            click_action: "https://human-24b1b.firebaseapp.com/message"
+                            click_action: "https://human-24b1b.firebaseapp.com/messages"
                         },
                         priority: "high",
 

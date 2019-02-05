@@ -5,7 +5,6 @@ import * as requestModel from '../model/requestModel'
 import axios from 'axios';
 import { messaging } from 'firebase';
 
-
 export namespace requestController {
     export class RequestData {
         public writeRequestData(req: Request, res: Response, next: NextFunction): Promise<any> {
